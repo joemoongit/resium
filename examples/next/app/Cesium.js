@@ -23,10 +23,14 @@ export default function Cesium() {
 
     if (rotating) {
       viewer.scene.screenSpaceCameraController.enableInputs = false;
+      let lastTime = performance.now();
       listenerRef.current = viewer.clock.onTick.addEventListener(() => {
+        const now = performance.now();
+        const dt = (now - lastTime) / 1000;
+        lastTime = now;
         viewer.scene.camera.rotate(
           Cartesian3.UNIT_Z,
-          CesiumMath.toRadians(0.1),
+          CesiumMath.toRadians((360 / 86164.091) * dt),
         );
       });
     } else {
